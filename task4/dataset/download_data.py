@@ -7,6 +7,8 @@
 from __future__ import print_function, absolute_import
 
 import os
+import time
+
 from tqdm import tqdm
 from dcase_util.containers import AudioContainer
 from youtube_dl.utils import ExtractorError, DownloadError
@@ -54,46 +56,7 @@ def download_file(result_dir, filename):
     }
 
     try:
-        # Download file
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            meta = ydl.extract_info(
-                'https://www.youtube.com/watch?v={query_id}'.format(query_id=query_id), download=True)
-
-        audio_formats = [f for f in meta["formats"] if f.get('vcodec') == 'none']
-
-        if audio_formats is []:
-            return [filename, "no audio format available"]
-
-        # get the best audio format
-        best_audio_format = audio_formats[-1]
-
-        tmp_filename = "tmp/" + query_id + "." + best_audio_format["ext"]
-
-        # Format audio
-        audio_container.load(filename=tmp_filename, fs=44100, res_type='kaiser_best',
-                             start=float(segment_start), stop=float(segment_end))
-
-        # Save segmented audio
-        audio_container.filename = filename
-        audio_container.detect_file_format()
-        audio_container.save(filename=os.path.join(result_dir, filename))
-
-        #Remove temporary file
-        os.remove(tmp_filename)
-        return []
-
-    except (KeyboardInterrupt, SystemExit):
-        # Remove temporary files and current audio file.
-        for fpath in glob.glob("tmp/" + query_id + "*"):
-            os.remove(fpath)
-        raise
-
-    # youtube-dl error, file often removed
-    except (ExtractorError, DownloadError) as e:
-        if os.path.exists(tmp_filename):
-            os.remove(tmp_filename)
-
-        return [filename, str(e)]
+        return [filename, "gave up downloading"]
 
     # multiprocessing can give this error
     except IndexError as e:
@@ -194,7 +157,7 @@ if __name__ == "__main__":
     log.info("Once database is downloaded, do not forget to check your missing_files")
 
     # Modify it with the number of process you want, but be careful, youtube can block you if you put too many.
-    N_JOBS = 3
+    N_JOBS = 1
 
     # Only useful when multiprocessing,
     # if chunk_size is high, download is faster. Be careful, progress bar only update after each chunk.
@@ -215,10 +178,10 @@ if __name__ == "__main__":
     result_dir = os.path.join("audio", "train", "unlabel_in_domain")
     download(train_unlabel_in_domain, result_dir, n_jobs=N_JOBS, chunk_size=CHUNK_SIZE)
 
-    log.line("Train, unlabel out of domain data")
-    train_unlabel_out_of_domain = os.path.join("metadata", "train", "unlabel_out_of_domain.csv")
-    result_dir = os.path.join("audio", "train", "unlabel_out_of_domain")
-    download(train_unlabel_out_of_domain, result_dir, n_jobs=N_JOBS, chunk_size=CHUNK_SIZE)
+    #log.line("Train, unlabel out of domain data")
+    #train_unlabel_out_of_domain = os.path.join("metadata", "train", "unlabel_out_of_domain.csv")
+    #result_dir = os.path.join("audio", "train", "unlabel_out_of_domain")
+    #download(train_unlabel_out_of_domain, result_dir, n_jobs=N_JOBS, chunk_size=CHUNK_SIZE)
 
     log.line("Eval")
     train_unlabel_out_of_domain = os.path.join("metadata", "eval", "eval.csv")

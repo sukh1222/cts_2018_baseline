@@ -76,10 +76,10 @@ class DCASE2018_Task4_DevelopmentSet(AudioTaggingDataset):
                 'content_type': 'meta',
                 'filename': 'dataset/metadata/test/test.csv'
             },
-            {
-                'content_type': 'meta',
-                'filename': 'dataset/metadata/train/unlabel_out_of_domain.csv',
-            },
+            #{
+            #    'content_type': 'meta',
+            #    'filename': 'dataset/metadata/train/unlabel_out_of_domain.csv',
+            #},
             {
                 'content_type': 'meta',
                 'filename': 'dataset/metadata/eval/eval.csv',

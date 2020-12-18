@@ -83,6 +83,8 @@ def main(parameters):
     keras_model_first_pass = None
     keras_model_second_pass = None
 
+    print("initdb")
+
     # =====================================================================
     # Dataset
     # =====================================================================
@@ -93,19 +95,23 @@ def main(parameters):
                                         audio_paths=[
                                             os.path.join("dataset", "audio", "train", "weak"),
                                             os.path.join("dataset", "audio", "train", "unlabel_in_domain"),
-                                            os.path.join("dataset", "audio", "train", "unlabel_out_of_domain"),
+                                            #os.path.join("dataset", "audio", "train", "unlabel_out_of_domain"),
                                             os.path.join("dataset", "audio", "test"),
                                             os.path.join("dataset", "audio", "eval")
                                         ]
                                         ).initialize()
 
+    print("aaa")
     # Active folds
     folds = db.folds(
         mode=param.get_path('dataset.parameters.evaluation_mode')
     )
+    print("bbb")
     active_fold_list = param.get_path('dataset.parameters.fold_list')
+    print("ccc")
     if active_fold_list:
         folds = list(set(folds).intersection(active_fold_list))
+    print("ddd")
 
     # =====================================================================
     # Feature extraction stage
@@ -192,6 +198,7 @@ def main(parameters):
                     )
 
             # Finalize and save
+            print(normalizer)
             normalizer.finalize().save()
 
         log.foot()
