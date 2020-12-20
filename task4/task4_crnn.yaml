@@ -85,7 +85,7 @@ defaults:
     mel:
       spectrogram_type: magnitude
       window_type: hamming_asymmetric
-      n_mels: 64
+      n_mels: 80
       n_fft: 2048
       fmin: 0
       fmax: 22050
@@ -132,7 +132,7 @@ defaults:
 
       model:
         constants:
-          CONVOLUTION_FILTER: 64
+          CONVOLUTION_FILTER: 80
           CONVOLUTION_INIT: glorot_uniform
           CONVOLUTION_BORDER_MODE: same
 
@@ -148,7 +148,7 @@ defaults:
         first_pass:
           validation_amount: 0.2
           fit:
-            epochs: 100
+            epochs: 50
             batch_size: 16
             shuffle: true
 
@@ -278,7 +278,7 @@ defaults:
             - class_name: GRU
               wrapper: Bidirectional
               config:
-                units: 64
+                units: 80
                 return_sequences: true
                 recurrent_dropout: RECURRENT_DROPOUT
                 dropout: DROPOUT
@@ -302,7 +302,7 @@ defaults:
           # a float in [0, 1] is also accepted to get a pourcentage of all training data
           validation_amount: "weak"
           fit:
-            epochs: 100
+            epochs: 50
             batch_size: 128
             shuffle: true
 
@@ -434,7 +434,7 @@ defaults:
             - class_name: GRU
               wrapper: Bidirectional
               config:
-                units: 64
+                units: 80
                 return_sequences: true
                 recurrent_dropout: RECURRENT_DROPOUT
                 dropout: DROPOUT
@@ -452,8 +452,8 @@ defaults:
           manual_update: true
           monitor: val_macro_f_measure
           initial_delay: 5
-          min_delta: 0.01 # be careful, means 1%
-          patience: 15
+          min_delta: 0.02 # be careful, means 1%
+          patience: 5
           external_metric_labels:
             val_macro_f_measure: val_macro_f_measure
             tra_macro_f_measure: tra_macro_f_measure
