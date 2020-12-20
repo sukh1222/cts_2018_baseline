@@ -132,7 +132,7 @@ defaults:
 
       model:
         constants:
-          CONVOLUTION_FILTER: 80
+          CONVOLUTION_FILTER: 56
           CONVOLUTION_INIT: glorot_uniform
           CONVOLUTION_BORDER_MODE: same
 
@@ -148,7 +148,7 @@ defaults:
         first_pass:
           validation_amount: 0.2
           fit:
-            epochs: 50
+            epochs: 100
             batch_size: 16
             shuffle: true
 
@@ -278,7 +278,7 @@ defaults:
             - class_name: GRU
               wrapper: Bidirectional
               config:
-                units: 80
+                units: 56
                 return_sequences: true
                 recurrent_dropout: RECURRENT_DROPOUT
                 dropout: DROPOUT
@@ -434,7 +434,7 @@ defaults:
             - class_name: GRU
               wrapper: Bidirectional
               config:
-                units: 80
+                units: 56
                 return_sequences: true
                 recurrent_dropout: RECURRENT_DROPOUT
                 dropout: DROPOUT
@@ -452,8 +452,8 @@ defaults:
           manual_update: true
           monitor: val_macro_f_measure
           initial_delay: 5
-          min_delta: 0.02 # be careful, means 1%
-          patience: 5
+          min_delta: 0.01 # be careful, means 1%
+          patience: 15
           external_metric_labels:
             val_macro_f_measure: val_macro_f_measure
             tra_macro_f_measure: tra_macro_f_measure
